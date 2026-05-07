@@ -1,0 +1,26 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check-fix
+        name: ruff check --fix
+        entry: ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: ruff format
+        language: system
+        types: [python]
+
+      - id: end-of-file-fixer
+        name: end-of-file-fixer
+        entry: python -c "import pathlib,sys; [pathlib.Path(f).write_text(pathlib.Path(f).read_text(encoding='utf-8', errors='ignore').rstrip('\n') + '\n', encoding='utf-8') for f in sys.argv[1:]]"
+        language: system
+        files: \.(py|sh|md|yaml|yml|json|toml|txt)$
+        pass_filenames: true
+      - id: trailing-whitespace
+        name: trailing-whitespace
+        entry: python -c "import pathlib,sys; [pathlib.Path(f).write_text(''.join([(ln[:-1].rstrip(' \t') + '\n') if ln.endswith('\n') else ln.rstrip(' \t') for ln in pathlib.Path(f).read_text(encoding='utf-8', errors='ignore').splitlines(True)]), encoding='utf-8') for f in sys.argv[1:]]"
+        language: system
+        files: \.(py|sh|md|yaml|yml|json|toml|txt)$
+        pass_filenames: true
